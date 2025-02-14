@@ -1,0 +1,47 @@
+services:
+  nginx:
+    build:
+      context: ./requirements/nginx/
+      dockerfile: Dockerfile
+    container_name: nginx
+    ports:
+      - "443:443"
+    volumes:
+      - /home/yususato/data/wordpress/:/var/www/html
+    networks:
+      - proxy
+    depends_on:
+      - wordpress
+
+  wordpress:
+    build:
+      context: ./requirements/wordpress/
+      dockerfile: Dockerfile
+    container_name: wordpress
+    env_file:
+      - .env
+    volumes:
+      - /home/yususato/data/wordpress:/var/www/html/
+    depends_on:
+      - mariadb
+    networks:
+      - proxy
+
+  mariadb:
+    build:
+      context: ./requirements/mariadb/
+      dockerfile: Dockerfile
+    container_name: mariadb
+    env_file:
+      - .env
+    volumes:
+      - /home/yususato/data/db:/var/lib/mysql/
+    networks:
+      - proxy
+    expose:
+      - "3306"
+
+networks:
+  proxy:
+    driver: bridge
+# driverは通信が自分のパソコンで完結されるか、複数サーバー(overlay)かを指定している。

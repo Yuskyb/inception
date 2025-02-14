@@ -1,0 +1,42 @@
+
+[mysqld]
+init_file = /docker-entrypoint-initdb.d/init.sql
+
+datadir = /var/lib/mysql
+port = 3306
+
+user = mysql
+pid-file = /run/mysqld/mysqld.pid
+basedir = /usr
+tmpdir = /tmp
+
+
+socket = /run/mysqld/mysqld.sock
+
+
+# ソケットファイルの場所
+
+bind-address = 0.0.0.0
+# 接続先を限定。
+
+max_connections = 100
+
+log_error = /var/log/mysql/error.log
+# エラーログの出力先
+
+slow_query_log = 1
+# 一定時間以上かかったクエリを記録してパフォーマンスを向上させる。
+
+slow_query_log_file = /var/log/mysql/slow.log
+
+long_query_time = 2
+
+character-set-server = utf8mb4
+
+[client]
+port = 3306
+
+socket = /run/mysqld/mysqld.sock
+
+default-character-set = utf8mb4
+
